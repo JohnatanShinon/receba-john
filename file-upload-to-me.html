@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar Arquivos para @johnshinon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #555 0%, #fff 100%);
+            color: #666;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #111;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 1.1rem;
+        }
+        
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #999;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        input[type="text"]:focus, textarea:focus {
+            border-color: #111;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(142, 84, 233, 0.2);
+        }
+        
+        .file-upload-area {
+            border: 3px dashed #555;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            background-color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .file-upload-area:hover {
+            background-color: #000;
+        }
+        
+        .file-upload-area i {
+            font-size: 3rem;
+            color: #00ff00;
+            margin-bottom: 15px;
+        }
+        
+        .file-upload-area h3 {
+            color: #777;
+            margin-bottom: 10px;
+        }
+        
+        .file-upload-area p {
+            color: #fff;
+        }
+        
+        .file-list {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .file-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            width: 200px;
+            position: relative;
+        }
+        
+        .file-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .file-item .file-name {
+            font-weight: 600;
+            color: #555;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 5px;
+        }
+        
+        .file-item .file-size {
+            font-size: 0.9rem;
+            color: #777;
+        }
+        
+        .remove-file {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #555;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.8rem;
+            border: 2px solid white;
+        }
+        
+        .button {
+            background: linear-gradient(to right, #555, #111);
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(142, 84, 233, 0.3);
+        }
+        
+        .button:active {
+            transform: translateY(0);
+        }
+        
+        .button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #555, #111);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+        
+        .progress-text {
+            text-align: center;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        
+        .status.progress {
+            background-color: #555;
+            color: #fff;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            border-left: 5px solid #4776E9;
+        }
+        
+        .instructions h3 {
+            color: #000;
+            margin-bottom: 15px;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .hidden-fields {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .file-item {
+                width: 150px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .file-item {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-file-upload"></i> Enviar arquivos para @johnshinon</h1>
+            <p>Envie arquivos sem perder qualidade diretamente para o destino.</p>
+        </div>
+        
+        <div class="content">
+            <div class="form-group">
+                <label>Seu nome (opcional)</label>
+                <input type="text" id="sender-name" placeholder="Digite seu nome...">
+            </div>
+            
+            <div class="form-group">
+                <label>Mensagem ou descrição dos arquivos (opcional)</label>
+                <textarea id="caption" placeholder="Digite uma mensagem ou descrição para os arquivos..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Selecione os arquivos para enviar</label>
+                <div class="file-upload-area" id="file-upload-area">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Clique ou arraste seus arquivos aqui</h3>
+                    <p>Você pode selecionar vários arquivos de uma vez</p>
+                    <div class="file-list" id="file-list"></div>
+                </div>
+                <input type="file" id="file-upload" style="display: none;" multiple>
+            </div>
+            
+            <!-- Campos ocultos com seus dados do Telegram -->
+            <div class="hidden-fields">
+                <input type="text" id="bot-token" value="7267227201:AAEWAXywU8l51ZeCo5zaIKkmmfaRzDOJV-g">
+                <input type="text" id="chat-id" value="-1002185274623">
+            </div>
+            
+            <div class="progress-container" id="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text" id="progress-text">0%</div>
+            </div>
+            
+            <button id="send-button" class="button">
+                <i class="fab fa-telegram-plane"></i> Enviar Arquivos
+            </button>
+            
+            <div id="status" class="status"></div>
+            
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> Como funciona</h3>
+                <ol>
+                    <li>Digite seu nome (opcional) e uma mensagem se quiser</li>
+                    <li>Selecione os arquivos que deseja enviar (imagens, vídeos, documentos)</li>
+                    <li>Clique em "Enviar Arquivos" para enviar diretamente para @johnshinon</li>
+                    <li>Os arquivos são enviados sem compressão, mantendo a qualidade original</li>
+                    <li>Você não precisa ter conta no Telegram para usar este serviço</li>
+                </ol>
+                <p style="margin-top: 15px; font-size: 0.9rem; color: #666;">
+                    <i class="fas fa-shield-alt"></i> Seus arquivos são enviados diretamente para o Telegram e não são armazenados em nossos servidores.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos DOM
+            const fileUpload = document.getElementById('file-upload');
+            const fileUploadArea = document.getElementById('file-upload-area');
+            const fileList = document.getElementById('file-list');
+            const botTokenInput = document.getElementById('bot-token');
+            const chatIdInput = document.getElementById('chat-id');
+            const senderNameInput = document.getElementById('sender-name');
+            const captionInput = document.getElementById('caption');
+            const sendButton = document.getElementById('send-button');
+            const statusDisplay = document.getElementById('status');
+            const progressContainer = document.getElementById('progress-container');
+            const progressFill = document.getElementById('progress-fill');
+            const progressText = document.getElementById('progress-text');
+            
+            // Substitua pelos seus dados reais
+            // botTokenInput.value = "SEU_BOT_TOKEN_AQUI";
+            // chatIdInput.value = "SEU_CHAT_ID_AQUI";
+            
+            // Variáveis globais
+            let files = [];
+            let isSending = false;
+            const MAX_FILES = 10;
+            const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB limite do Telegram
+            
+            // Área de upload de arquivos
+            fileUploadArea.addEventListener('click', () => fileUpload.click());
+            
+            fileUpload.addEventListener('change', handleFileSelect);
+            
+            // Drag and drop
+            fileUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fileUploadArea.style.borderColor = '#4776E6';
+                fileUploadArea.style.backgroundColor = '#f0ebff';
+            });
+            
+            fileUploadArea.addEventListener('dragleave', () => {
+                fileUploadArea.style.borderColor = '#8E54E9';
+                fileUploadArea.style.backgroundColor = '#f9f7ff';
+            });
+            
+            fileUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                fileUploadArea.style.borderColor = '#8E54E9';
+                fileUploadArea.style.backgroundColor = '#f9f7ff';
+                
+                if (e.dataTransfer.files.length > 0) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+            
+            // Enviar arquivos
+            sendButton.addEventListener('click', sendFiles);
+            
+            // Funções
+            function handleFileSelect(e) {
+                const selectedFiles = e.target.files;
+                handleFiles(selectedFiles);
+            }
+            
+            function handleFiles(selectedFiles) {
+                // Verificar limite de arquivos
+                if (files.length + selectedFiles.length > MAX_FILES) {
+                    showStatus(`Limite de ${MAX_FILES} arquivos excedido!`, 'error');
+                    return;
+                }
+                
+                // Adicionar novos arquivos com verificação de tamanho
+                Array.from(selectedFiles).forEach(file => {
+                    if (file.size > MAX_FILE_SIZE) {
+                        showStatus(`Arquivo "${file.name}" excede o limite de 50MB`, 'error');
+                        return;
+                    }
+                    
+                    if (!files.some(f => f.name === file.name && f.size === file.size)) {
+                        files.push(file);
+                    }
+                });
+                
+                updateFileList();
+            }
+            
+            function updateFileList() {
+                fileList.innerHTML = '';
+                
+                files.forEach((file, index) => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    
+                    // Verificar tipo de arquivo
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            fileItem.innerHTML = `
+                                <img src="${e.target.result}" alt="${file.name}">
+                                <div class="file-name">${file.name}</div>
+                                <div class="file-size">${formatFileSize(file.size)}</div>
+                                <div class="remove-file" data-index="${index}">×</div>
+                            `;
+                        };
+                        reader.readAsDataURL(file);
+                    } else if (file.type.startsWith('video/')) {
+                        fileItem.innerHTML = `
+                            <div style="height: 120px; display: flex; align-items: center; justify-content: center; background: linear-gradient(to right, #4776E6, #8E54E9); border-radius: 5px; margin-bottom: 10px;">
+                                <i class="fas fa-video" style="font-size: 3rem; color: white;"></i>
+                            </div>
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${formatFileSize(file.size)}</div>
+                            <div class="remove-file" data-index="${index}">×</div>
+                        `;
+                    } else {
+                        fileItem.innerHTML = `
+                            <div style="height: 120px; display: flex; align-items: center; justify-content: center; background: #f0f0f0; border-radius: 5px; margin-bottom: 10px;">
+                                <i class="fas fa-file" style="font-size: 3rem; color: #8E54E9;"></i>
+                            </div>
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${formatFileSize(file.size)}</div>
+                            <div class="remove-file" data-index="${index}">×</div>
+                        `;
+                    }
+                    
+                    fileList.appendChild(fileItem);
+                });
+                
+                // Adicionar eventos de remoção
+                document.querySelectorAll('.remove-file').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const index = parseInt(e.target.getAttribute('data-index'));
+                        files.splice(index, 1);
+                        updateFileList();
+                    });
+                });
+            }
+            
+            async function sendFiles() {
+                if (isSending) return;
+                
+                // Validações básicas
+                if (files.length === 0) {
+                    showStatus('Por favor, selecione pelo menos um arquivo', 'error');
+                    return;
+                }
+                
+                // Configurar envio
+                isSending = true;
+                sendButton.disabled = true;
+                sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+                progressContainer.style.display = 'block';
+                
+                try {
+                    const results = [];
+                    const totalFiles = files.length;
+                    
+                    // Criar mensagem personalizada com nome do remetente
+                    let finalCaption = captionInput.value.trim();
+                    if (senderNameInput.value.trim()) {
+                        if (finalCaption) {
+                            finalCaption = `De: ${senderNameInput.value.trim()}\n\n${finalCaption}`;
+                        } else {
+                            finalCaption = `De: ${senderNameInput.value.trim()}`;
+                        }
+                    }
+                    
+                    for (let i = 0; i < totalFiles; i++) {
+                        const file = files[i];
+                        
+                        // Atualizar progresso
+                        updateProgress(i, totalFiles, file.name);
+                        
+                        try {
+                            // Enviar arquivo
+                            const result = await sendFileToTelegram(file, finalCaption);
+                            results.push({
+                                file: file.name,
+                                status: 'success',
+                                message: 'Enviado com sucesso'
+                            });
+                            
+                        } catch (error) {
+                            results.push({
+                                file: file.name,
+                                status: 'error',
+                                message: error.message
+                            });
+                        }
+                    }
+                    
+                    // Atualizar progresso final
+                    updateProgress(totalFiles, totalFiles, 'Concluído');
+                    
+                    // Mostrar resumo
+                    const successful = results.filter(r => r.status === 'success').length;
+                    const failed = results.filter(r => r.status === 'error').length;
+                    
+                    if (successful === totalFiles) {
+                        showStatus(`✅ Todos os ${totalFiles} arquivos foram enviados com sucesso!`, 'success');
+                    } else if (successful > 0) {
+                        showStatus(`✅ ${successful} arquivos enviados. ${failed} falhas.`, 'success');
+                    } else {
+                        showStatus(`❌ Falha ao enviar os arquivos. Verifique os dados de configuração.`, 'error');
+                    }
+                    
+                    // Limpar após envio bem-sucedido
+                    if (successful > 0) {
+                        files = [];
+                        updateFileList();
+                        fileUpload.value = '';
+                        senderNameInput.value = '';
+                        captionInput.value = '';
+                    }
+                    
+                } catch (error) {
+                    showStatus(`Erro: ${error.message}`, 'error');
+                } finally {
+                    // Restaurar estado
+                    isSending = false;
+                    sendButton.disabled = false;
+                    sendButton.innerHTML = '<i class="fab fa-telegram-plane"></i> Enviar Arquivos';
+                    
+                    // Esconder progresso após 3 segundos
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                        progressFill.style.width = '0%';
+                        progressText.textContent = '0%';
+                    }, 3000);
+                }
+            }
+            
+            async function sendFileToTelegram(file, caption) {
+                const formData = new FormData();
+                formData.append('chat_id', chatIdInput.value.trim());
+                if (caption) {
+                    formData.append('caption', caption);
+                }
+                
+                // Determinar o tipo de arquivo para usar a API correta
+                let apiMethod = 'sendDocument';
+                
+                if (file.type.startsWith('image/')) {
+                    apiMethod = 'sendPhoto';
+                } else if (file.type.startsWith('video/')) {
+                    apiMethod = 'sendVideo';
+                } else if (file.type.startsWith('audio/')) {
+                    apiMethod = 'sendAudio';
+                }
+                
+                formData.append(apiMethod === 'sendPhoto' ? 'photo' : 
+                               apiMethod === 'sendVideo' ? 'video' : 
+                               apiMethod === 'sendAudio' ? 'audio' : 'document', file);
+                
+                const apiUrl = `https://api.telegram.org/bot${botTokenInput.value.trim()}/${apiMethod}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (!result.ok) {
+                    throw new Error(result.description || 'Falha ao enviar o arquivo');
+                }
+                
+                return result;
+            }
+            
+            function updateProgress(current, total, fileName) {
+                const percent = Math.round((current / total) * 100);
+                progressFill.style.width = `${percent}%`;
+                progressText.textContent = `${percent}% - ${fileName || `Enviando ${current} de ${total}`}`;
+            }
+            
+            function showStatus(message, type) {
+                statusDisplay.textContent = message;
+                statusDisplay.className = `status ${type}`;
+                
+                if (type === 'success') {
+                    setTimeout(() => {
+                        statusDisplay.style.display = 'none';
+                    }, 8000);
+                }
+            }
+            
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+        });
+    </script>
+</body>
+</html>
